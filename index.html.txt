@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Valentine Mission 💘</title>
+<style>
+body {
+    background: linear-gradient(135deg, #111, #1f1f1f);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.hidden { display: none; }
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background: crimson;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+}
+input {
+    padding: 8px;
+    margin: 10px;
+}
+.floating-heart {
+    position: absolute;
+    font-size: 20px;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div id="login">
+    <h1>💘 Private Access 💘</h1>
+    <p>Enter your email to begin your mission</p>
+    <input type="email" id="email">
+    <br>
+    <button onclick="checkEmail()">Unlock</button>
+</div>
+
+<div id="warning" class="hidden">
+    <h2>⚠️ WARNING ⚠️</h2>
+    <p>May cause excessive happiness, cute overload and love.<br>Proceed with caution.</p>
+    <button onclick="proceed()">Proceed</button>
+</div>
+
+<script>
+// Floating hearts
+function createFloatingHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('floating-heart');
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.fontSize = 20 + Math.random() * 30 + 'px';
+    heart.style.animationDuration = 4 + Math.random() * 4 + 's';
+    heart.style.color = ['#ff69b4','#ff1493','#ff4081','#ff66cc'][Math.floor(Math.random()*4)];
+    heart.innerHTML = '❤️';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+}
+setInterval(createFloatingHeart, 500);
+
+// --- Birthday confetti ---
+function launchConfetti(count){
+    for(let i=0;i<count;i++){
+        const confetti = document.createElement('div');
+        confetti.style.position='absolute';
+        const size = Math.random()*12 + 8;
+        confetti.style.width=size+'px';
+        confetti.style.height=size+'px';
+        confetti.style.borderRadius = Math.random() < 0.5 ? '0%' : '50%';
+        const colors = ['#ff595e','#ffca3a','#8ac926','#1982c4','#6a4c93','#ff6d00','#ff3f00'];
+        confetti.style.background = colors[Math.floor(Math.random()*colors.length)];
+        confetti.style.left = Math.random()*window.innerWidth+'px';
+        confetti.style.top = '-20px';
+        const rotate = Math.random()*360;
+        confetti.style.transform=`rotate(${rotate}deg)`;
+        const duration = 2 + Math.random()*3;
+        confetti.style.animation=`birthdayFall ${duration}s linear forwards`;
+        document.body.appendChild(confetti);
+        setTimeout(()=>confetti.remove(), duration*1000);
+    }
+}
+const style = document.createElement('style');
+style.innerHTML=`
+@keyframes birthdayFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}`;
+document.head.appendChild(style);
+
+// Check email
+function checkEmail() {
+    const email = document.getElementById('email').value;
+    if(email === "kiranzthomas@gmail.com") {
+        document.getElementById('login').classList.add('hidden');
+        document.getElementById('warning').classList.remove('hidden');
+    } else {
+        alert("Access Denied 😏");
+    }
+}
+
+// Proceed button
+function proceed() {
+    launchConfetti(200);
+    setTimeout(()=> {
+        window.location.href = "invite.html";
+    }, 1000);
+}
+</script>
+</body>
+</html>

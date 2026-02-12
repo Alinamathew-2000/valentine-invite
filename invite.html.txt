@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Valentine Mission 💘</title>
+<style>
+body {
+    background: linear-gradient(135deg, #111, #1f1f1f);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.hidden { display: none; }
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background: crimson;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+}
+input {
+    padding: 8px;
+    margin: 10px;
+}
+.floating-heart {
+    position: absolute;
+    font-size: 20px;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+}
+.confetti-piece {
+    position: absolute;
+    pointer-events: none;
+}
+h1,h2,p{margin:20px;}
+</style>
+</head>
+<body>
+
+<!-- Proposal -->
+<div id="proposal">
+    <h2>Life is better with you by my side.<br>
+    You make my world spin, my heart skip a beat, and my life complete.<br>
+    Will you be my partner in crime, my forever buddy, and my valentine for life?</h2>
+    <button onclick="chooseYes()">Oh yes my lady! 💖</button>
+    <button onclick="chooseNo()">Escape 😢</button>
+</div>
+
+<!-- Quiz intro -->
+<div id="quizIntro" class="hidden">
+    <h2>You thought it was that easy... Na na na!<br>
+    You have to answer a few questions and let them decide if we are a match.</h2>
+    <button onclick="startQuiz()">Let's Start 💌</button>
+</div>
+
+<!-- Questions -->
+<div id="questions" class="hidden">
+    <h2 id="questionText"></h2>
+    <input type="text" id="answerInput">
+    <br>
+    <button onclick="submitAnswer()">Submit</button>
+</div>
+
+<!-- LOSER page -->
+<div id="loser" class="hidden">
+    <h1 style="font-size:80px; color:red;">LOSER 😢</h1>
+</div>
+
+<!-- Passcode page -->
+<div id="passcodePage" class="hidden">
+    <h2>Unlock it using the passcode:</h2>
+    <p>What is my favourite name to call you?</p>
+    <input type="text" id="passcodeInput">
+    <br>
+    <button onclick="checkPasscode()">Unlock 💖</button>
+</div>
+
+<!-- Final invite -->
+<div id="finalInvite" class="hidden">
+    <h1>🎉 You are a Match 1! 💘</h1>
+    <h2>You are invited to a Valentine Dinner on 14th Feb</h2>
+    <p>Vine is complementary to any option you choose 🍷</p>
+    <button onclick="chooseDinner('High-Protein Italian Night')">High-Protein Italian Night 🍝</button>
+    <button onclick="chooseDinner('Spicy Mexican Fit Feast')">Spicy Mexican Fit Feast 🌮</button>
+    <button onclick="chooseDinner('Asian Fusion Power Dinner')">Asian Fusion Power Dinner 🍜</button>
+</div>
+
+<!-- Congratulations -->
+<div id="congrats" class="hidden">
+    <h1 style="font-size:50px;">🎉 Congratulations! 🎉</h1>
+    <h2>Love you 💖</h2>
+</div>
+
+<!-- Music -->
+<iframe width="0" height="0" src="https://www.youtube.com/embed/ORrFJ63nlcA?autoplay=1&loop=1&playlist=ORrFJ63nlcA" frameborder="0" allow="autoplay"></iframe>
+
+<script>
+// Floating hearts
+function createFloatingHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('floating-heart');
+    heart.style.left = Math.random()*window.innerWidth+'px';
+    heart.style.fontSize = 20+Math.random()*30+'px';
+    heart.style.animationDuration = 4+Math.random()*4+'s';
+    heart.style.color=['#ff69b4','#ff1493','#ff4081','#ff66cc'][Math.floor(Math.random()*4)];
+    heart.innerHTML='❤️';
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),8000);
+}
+setInterval(createFloatingHeart,500);
+
+// Birthday-style confetti
+function launchConfetti(count){
+    for(let i=0;i<count;i++){
+        const confetti = document.createElement('div');
+        confetti.style.position='absolute';
+        const size = Math.random()*12 + 8;
+        confetti.style.width=size+'px';
+        confetti.style.height=size+'px';
+        confetti.style.borderRadius = Math.random()<0.5?'0%':'50%';
+        const colors=['#ff595e','#ffca3a','#8ac926','#1982c4','#6a4c93','#ff6d00','#ff3f00'];
+        confetti.style.background = colors[Math.floor(Math.random()*colors.length)];
+        confetti.style.left = Math.random()*window.innerWidth+'px';
+        confetti.style.top='-20px';
+        confetti.style.transform=`rotate(${Math.random()*360}deg)`;
+        const duration = 2+Math.random()*3;
+        confetti.style.animation=`birthdayFall ${duration}s linear forwards`;
+        document.body.appendChild(confetti);
+        setTimeout(()=>confetti.remove(),duration*1000);
+    }
+}
+const style = document.createElement('style');
+style.innerHTML=`@keyframes birthdayFall {
+    0% { transform: translateY(0) rotate(0deg); opacity:1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity:0; }
+}`;
+document.head.appendChild(style);
+
+// --- Page logic ---
+function chooseYes(){ launchConfetti(200); document.getElementById('proposal').classList.add('hidden'); document.getElementById('quizIntro').classList.remove('hidden'); }
+function chooseNo(){ document.getElementById('proposal').classList.add('hidden'); document.getElementById('loser').classList.remove('hidden'); }
+function startQuiz(){ launchConfetti(150); document.getElementById('quizIntro').classList.add('hidden'); document.getElementById('questions').classList.remove('hidden'); currentQuestion=0; showQuestion(); }
+
+// Questions array
+const questions = [
+    {q:"What is my nickname kept by you?", a:"muthae", check:true},
+    {q:"When was the first time you brought me flowers?", a:"8th december 2025", check:true},
+    {q:"What is my favourite color?", a:"black", check:true},
+    {q:"What is my favourite flavor?", a:"chocolate", check:true},
+    {q:"What's the biggest insecurity you think I have?", a:"any", check:false},
+    {q:"What's the one thing you are afraid of losing in our relationship?", a:"any", check:false},
+    {q:"What do you think is the most attractive quality I possess?", a:"any", check:false},
+    {q:"Do you think you truly know me, if not what do you want to discover more about me?", a:"any", check:false},
+    {q:"What's your biggest insecurity when you imagine us together?", a:"any", check:false}
+];
+let currentQuestion=0;
+function showQuestion(){ document.getElementById('questionText').innerText = questions[currentQuestion].q; document.getElementById('answerInput').value=''; }
+function submitAnswer(){ const ans=document.getElementById('answerInput').value.toLowerCase(); if(questions[currentQuestion].check && ans !== questions[currentQuestion].a.toLowerCase()){ alert("Wrong answer, try again 😅"); return; } launchConfetti(150); currentQuestion++; if(currentQuestion<questions.length){ showQuestion(); }else{ document.getElementById('questions').classList.add('hidden'); document.getElementById('passcodePage').classList.remove('hidden'); } }
+
+// Passcode
+function checkPasscode(){ const ans=document.getElementById('passcodeInput').value.toLowerCase(); if(ans==='ichii'){ launchConfetti(300); document.getElementById('passcodePage').classList.add('hidden'); document.getElementById('finalInvite').classList.remove('hidden'); }else{ alert("Wrong passcode 😅"); } }
+
+// Dinner poll
+function chooseDinner(option){ launchConfetti(300); document.getElementById('finalInvite').classList.add('hidden'); const c=document.getElementById('congrats'); c.innerHTML=`<h1 style="font-size:50px;">🎉 Congratulations! 🎉</h1><h2>You chose: ${option}</h2><h2>Love you 💖</h2>`; c.classList.remove('hidden'); }
+</script>
+</body>
+</html>
