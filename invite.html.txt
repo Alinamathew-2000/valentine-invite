@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>💌 Valentine Interactive 💘</title>
+<style>
+body {
+    background: linear-gradient(135deg, #111, #1f1f1f);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+    overflow: hidden;
+    position: relative;
+}
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background: crimson;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+/* Floating hearts */
+.floating-heart {
+    position: absolute;
+    font-size: 20px;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div id="valentinePage">
+    <h1>Life is better with you by my side.</h1>
+    <p>You make my world spin, my heart skip a beat, and my life complete.<br>
+    Will you be my partner in crime, my forever buddy, and my Valentine for life?</p>
+    <button onclick="yesOption()">Oh yes my lady! 💖</button>
+    <button onclick="escapeOption()">Escape 😢</button>
+</div>
+
+<div id="loserPage" class="hidden">
+    <h1>LOSER</h1>
+</div>
+
+<div id="questionPage" class="hidden">
+    <h2>You thought it was that easy… na na na!</h2>
+    <p>You have to answer a few questions to see if we are a match</p>
+    <button onclick="startQuiz()">Let's Start 🎉</button>
+</div>
+
+<div id="quizPage" class="hidden">
+    <h2>Question 1: What is my nickname?</h2>
+    <input type="text" id="q1answer" placeholder="Type your answer">
+    <br>
+    <button onclick="checkQ1()">Submit</button>
+</div>
+
+<script>
+// --- Floating hearts ---
+function createFloatingHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'floating-heart';
+    heart.style.left = Math.random()*window.innerWidth+'px';
+    heart.style.fontSize = 20+Math.random()*30+'px';
+    heart.style.color = ['#ff69b4','#ff1493','#ff4081','#ff66cc'][Math.floor(Math.random()*4)];
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),8000);
+}
+setInterval(createFloatingHeart, 500);
+
+// --- Popcorn confetti ---
+function launchConfetti(amount=150){
+    const colors = ['#ff4081','#ffcc00','#00ffff','#ff69b4','#00ff7f','#ffa500','#ff1493'];
+    for(let i=0;i<amount;i++){
+        const c = document.createElement('div');
+        c.style.position='fixed';
+        c.style.width=c.style.height=Math.random()*8+4+'px';
+        c.style.background=colors[Math.floor(Math.random()*colors.length)];
+        c.style.left=window.innerWidth/2+'px';
+        c.style.top=window.innerHeight/2+'px';
+        c.style.borderRadius='50%';
+        c.style.pointerEvents='none';
+        document.body.appendChild(c);
+
+        const angle=Math.random()*2*Math.PI;
+        const speed=Math.random()*10+5;
+        const gravity=0.3+Math.random()*0.3;
+        let vx=Math.cos(angle)*speed;
+        let vy=Math.sin(angle)*speed;
+
+        function animate(){
+            vy+=gravity;
+            c.style.left = c.offsetLeft + vx + 'px';
+            c.style.top = c.offsetTop + vy + 'px';
+            c.style.transform = `rotate(${Math.random()*360}deg)`;
+            if(c.offsetTop < window.innerHeight*1.5){
+                requestAnimationFrame(animate);
+            } else {
+                c.remove();
+            }
+        }
+        animate();
+    }
+}
+
+// --- Button actions ---
+function yesOption(){
+    launchConfetti(300); // lots of confetti
+    document.getElementById('valentinePage').classList.add('hidden');
+    document.getElementById('questionPage').classList.remove('hidden');
+}
+
+function escapeOption(){
+    document.getElementById('valentinePage').classList.add('hidden');
+    document.getElementById('loserPage').classList.remove('hidden');
+}
+
+function startQuiz(){
+    launchConfetti(300);
+    document.getElementById('questionPage').classList.add('hidden');
+    document.getElementById('quizPage').classList.remove('hidden');
+}
+
+function checkQ1(){
+    const ans = document.getElementById('q1answer').value.toLowerCase();
+    if(ans.includes('muthae')){
+        alert('Correct! 🎉');
+        launchConfetti(500);
+        // You can continue with more questions or end page
+    } else {
+        alert('Oops! Try again 😅');
+    }
+}
+</script>
+</body>
+</html>
